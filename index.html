@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #434343, #000000);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #calculator {
+            background: #1c1c1c;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        #display {
+            width: 100%;
+            height: 60px;
+            font-size: 28px;
+            text-align: right;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #333;
+            color: #fff;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button {
+            flex: 1;
+            margin: 5px;
+            height: 60px;
+            font-size: 22px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+            color: #f1f1f1;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .button:active {
+            transform: scale(0.96);
+            background: #444;
+        }
+
+        .wide {
+            flex: 2.1;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="display" disabled />
+        <div class="row">
+            <button class="button" onclick="press('1')">1</button>
+            <button class="button" onclick="press('2')">2</button>
+            <button class="button" onclick="press('3')">3</button>
+            <button class="button" onclick="setOp('+')">+</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="press('4')">4</button>
+            <button class="button" onclick="press('5')">5</button>
+            <button class="button" onclick="press('6')">6</button>
+            <button class="button" onclick="setOp('-')">-</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="press('7')">7</button>
+            <button class="button" onclick="press('8')">8</button>
+            <button class="button" onclick="press('9')">9</button>
+            <button class="button" onclick="setOp('*')">*</button>
+        </div>
+        <div class="row">
+            <button class="button" onclick="press('.')">.</button>
+            <button class="button" onclick="press('0')">0</button>
+            <button class="button" onclick="calculate()">=</button>
+            <button class="button" onclick="setOp('/')">/</button>
+        </div>
+        <div class="row">
+            <button class="button wide" onclick="delChar()">Del</button>
+            <button class="button wide" onclick="clearDisplay()">Clr</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let num1 = null, num2 = null, op = null, resetNext = false;
+
+        function press(val) {
+            if (resetNext) {
+                display.value = '';
+                resetNext = false;
+            }
+            if (val === '.' && display.value.includes('.')) return;
+            display.value += val;
+        }
+
+        function setOp(operator) {
+            if (display.value === '') return;
+            num1 = parseFloat(display.value);
+            op = operator;
+            resetNext = true;
+        }
+
+        function calculate() {
+            if (op === null || display.value === '') return;
+            num2 = parseFloat(display.value);
+            let res = 0;
+            switch (op) {
+                case '+': res = num1 + num2; break;
+                case '-': res = num1 - num2; break;
+                case '*': res = num1 * num2; break;
+                case '/':
+                    if (num2 === 0) {
+                        display.value = "Error";
+                        num1 = num2 = op = null;
+                        return;
+                    }
+                    res = num1 / num2;
+                    break;
+            }
+            display.value = res;
+            num1 = res;
+            op = null;
+            resetNext = true;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+            num1 = num2 = op = null;
+        }
+
+        function delChar() {
+            display.value = display.value.slice(0, -1);
+        }
+    </script>
+</body>
+</html> 
