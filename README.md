@@ -39,5 +39,3 @@ calculator/
 - Modern, responsive UI (web version)
 
 ---
-
-Feel free to use or modify this project!
